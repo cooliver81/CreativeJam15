@@ -16,7 +16,7 @@ public class Player
     const int START = 0;
     double PENALTYPERCENTAGE = 1.5; //Multiplication to reduce more stats if repeated
 
-    int[,] matrix = new int[MOVE, ROUND]; // each player has a matrix to keep track of each move for each round
+    public int[,] matrix = new int[MOVE, ROUND]; // each player has a matrix to keep track of each move for each round
     enum Moves
     {
         Nothing,
@@ -94,7 +94,7 @@ public class Player
 
     public void inputMove(int currentMove)
     {
-        Debug.Log(currentMove);
+        Debug.Log("currentMove: " + currentMove);
         matrix[move, round] = currentMove;
         if (currentMove == (int)Moves.Attack) Attack();
         else if (currentMove == (int)Moves.Dodge) Dodge();

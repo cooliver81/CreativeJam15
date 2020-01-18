@@ -8,9 +8,13 @@ public class game : MonoBehaviour
     const int TOTALMOVES = 3;
     const int ROUNDS = 3;
 
-    int round;
-    Player player1;
-    Player player2;
+    public int round;
+    public Player player1;
+    public Player player2;
+
+    public GameObject ActionSequenceP1;
+    public GameObject ActionSequenceP2;
+
     bool takeInputs = true;
 
     public Button buttonA;
@@ -32,9 +36,7 @@ public class game : MonoBehaviour
         //check inputs?
         if (takeInputs == true)
         {
-            if (player1.move < 3) //check if move left
-            {
-                player1.move++;
+
                 if (Input.GetKeyDown(KeyCode.A)) //ATTACK
                 {
                     Debug.Log("p1");
@@ -50,10 +52,7 @@ public class game : MonoBehaviour
                     Debug.Log("p1");
                     player1.inputMove(3);
                 }
-            }
-            if (player2.move < 3) //check if move left
-            {
-                player2.move++;
+
                 if (Input.GetKeyDown(KeyCode.Joystick1Button0)) //ATTACK, A button
                 {
                     Debug.Log("p2");
@@ -69,7 +68,7 @@ public class game : MonoBehaviour
                     Debug.Log("p2");
                     player2.inputMove(3);
                 }
-            }
+
         }
     }
 
