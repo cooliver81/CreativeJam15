@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Player : MonoBehaviour
+public class Player 
 {
 
     //List<List<int>> allRounds = new List<List<int>>(new List<int>(new int[3]));
@@ -11,6 +11,7 @@ public class Player : MonoBehaviour
     const int ROUND = 3;
     const int MOVE = 3;
     const double STARTINGSTATS = 20;
+    const double STARTINGHEALTH = 50;
     const double STARTINGDEDUCT = 1;
     const int START = 0;
     double PENALTYPERCENTAGE = 1.5; //Multiplication to reduce more stats if repeated
@@ -24,18 +25,19 @@ public class Player : MonoBehaviour
         Charge
     }
 
-    int round;
-    int move;
+    public int round;
+    public int move;
 
-    private double attack;
-    private double dodge;
-    private double charge;
-    private double health;
+    public double attack;
+    public double dodge;
+    public double charge;
+    public double health;
 
-    private double attackDeduct;
-    private double dodgeDeduct;
+    public double attackDeduct;
+    public double dodgeDeduct;
 
-    private bool penalty;
+    public bool penalty;
+    public bool isCharged;
 
     // Start is called before the first frame update
     void Start()
@@ -45,8 +47,8 @@ public class Player : MonoBehaviour
 
         attack = STARTINGSTATS;
         dodge = STARTINGSTATS;
-        charge = STARTINGSTATS;
-        health = STARTINGSTATS;
+        charge = 0;
+        health = STARTINGHEALTH;
 
         attackDeduct = STARTINGDEDUCT;
         dodgeDeduct = STARTINGDEDUCT;
@@ -59,52 +61,40 @@ public class Player : MonoBehaviour
         
     }
 
-    double getMove() { return move; }
-    double getRound() { return round; }
-    double getAttack() { return attack; }
-    double getDodge() { return dodge; }
-    double getCharge() { return charge; }
-    double getHealth() { return health; }
-    double getAttackDeduct() { return attackDeduct; }
-    double getDodgeDeduct() { return dodgeDeduct; }
-    bool getPenalty() { return penalty; }
-
-    void setMove(int newMove) { this.move = newMove; }
-    void setRound(int newRound) { this.round = newRound; } 
-    void setAttack(double newAttack) { this.attack = newAttack; } 
-    void setDodge(double newDodge) { this.dodge = newDodge; } 
-    void setCharge(double newCharge) { this.charge = newCharge; } 
-    void setHealth(double newHealth) { this.health = newHealth; } 
-    void setAttackDeduct(double newAttackDeduct) { this.attackDeduct = newAttackDeduct; } 
-    void setDodgeDeduct(double newDodgeDeduct) { this.dodgeDeduct = newDodgeDeduct; }
-    void isPenalty() { penalty = !penalty; }
-
     void nextMove() { move++; }
-    void nextRound()
+    public void nextRound()
     {
-        
+        charge = 0;
+        move = 0;
         round++;
     }
 
-    double Attack()
+    public double Attack()
     {
-        double deduct = getAttackDeduct();
+        isCharged = false;
+        double deduct = attackDeduct;
         if (penalty) { deduct *= PENALTYPERCENTAGE; }
-        double newAttack = (getAttack() - getAttackDeduct());
-        setAttack(newAttack);
-        return getAttack();
+        attack = (attack - attackDeduct);
+        return attack;
     }
-    double Dodge()
+    public bool Dodge()
     {
-        return getDodge();
+        dodge--;
+        bool dodgeSuccess = true;
+        var chance = Random.Range(1, 20);
+        if (chance > dodge) dodgeSuccess = false; 
+        return dodgeSuccess;
     }
-    void Charge()
+    public void Charge()
     {
         //increase charge bar
+        isCharged = true;
+        charge++;
     }
 
-    void inputMove(int currentMove)
+    public void inputMove(int currentMove)
     {
+        Debug.Log(currentMove);
         matrix[move, round] = currentMove;
         if (currentMove == (int)Moves.Attack) Attack();
         else if (currentMove == (int)Moves.Dodge) Dodge();
